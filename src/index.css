@@ -9,6 +9,6 @@
 }
 
 body {
-  background: #000;
+  background: linear-gradient(to bottom, #70c5ce, #c9e8f0);
   overflow: hidden;
 }

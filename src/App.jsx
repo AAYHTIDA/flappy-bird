@@ -357,7 +357,7 @@ export default function App() {
   }, [startGame])
 
   return (
-    <div className="flex items-center justify-center w-screen h-screen bg-black">
+    <div className="flex items-center justify-center w-screen h-screen" style={{ background: 'linear-gradient(to bottom, #70c5ce, #c9e8f0)' }}>
       <div className="relative" style={{ width: W, height: H }}>
         {/* Score HUD */}
         <div className="absolute top-4 left-0 right-0 flex justify-between px-4 z-10 pointer-events-none select-none">
