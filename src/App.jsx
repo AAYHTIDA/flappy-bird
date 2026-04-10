@@ -57,6 +57,27 @@ function playScore() {
   } catch (_) {}
 }
 
+function playVictory() {
+  try {
+    const ctx = getAudioCtx()
+    // Ascending fanfare: C E G C
+    const notes = [523, 659, 784, 1047]
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.type = 'triangle'
+      const t = ctx.currentTime + i * 0.13
+      osc.frequency.setValueAtTime(freq, t)
+      gain.gain.setValueAtTime(0.3, t)
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18)
+      osc.start(t)
+      osc.stop(t + 0.18)
+    })
+  } catch (_) {}
+}
+
 function playHit() {
   try {
     const ctx = getAudioCtx()
@@ -268,10 +289,14 @@ export default function App() {
       if (!p.scored && p.x + PIPE_WIDTH < BIRD_X) {
         p.scored = true
         s.score++
-        s.hiScore = Math.max(s.hiScore, s.score)
+        const isNewHi = s.score > s.hiScore
+        if (isNewHi) {
+          s.hiScore = s.score
+          playVictory()
+        }
         if (scoreDisplayRef.current) scoreDisplayRef.current.textContent = s.score
         if (highScoreDisplayRef.current) highScoreDisplayRef.current.textContent = s.hiScore
-        playSound('score')
+        if (!isNewHi) playSound('score')
       }
     })
     s.pipes = s.pipes.filter(p => p.x + PIPE_WIDTH > 0)
